@@ -52,6 +52,20 @@ function App() {
     navigateTo('alltypes');
   }, [navigateTo]);
 
+  const handleBackToHome = useCallback(() => {
+    if (result) {
+      const p = result.personality;
+      (window as any).ReactNativeWebView?.postMessage(JSON.stringify({
+        type: 'CLOSE_WEBVIEW',
+        payload: {
+          quizId: 'suangua',
+          quizTitle: '暗黑洪荒算卦问卷',
+          result: `「${p.rarity}」${p.emoji} ${p.beast}`,
+        },
+      }));
+    }
+  }, [result]);
+
   const handleBackToResult = useCallback(() => {
     navigateTo('result');
   }, [navigateTo]);
@@ -73,6 +87,7 @@ function App() {
           personalityMap={PERSONALITY_MAP}
           onRestart={handleRestart}
           onViewAllTypes={handleViewAllTypes}
+          onBackToHome={handleBackToHome}
         />
       )}
       {page === 'alltypes' && (

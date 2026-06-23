@@ -55,7 +55,7 @@ const Landing: FC<LandingProps> = ({ onStart }) => {
         <div className="mt-16 flex flex-col items-center">
           <div className="w-8 h-px bg-gold opacity-40 mb-3" />
           <p className="text-xs text-text-muted opacity-60">
-            基于山海经 · 纯属娱乐 · 毒舌慎入
+            基于山海经 · 原作 Neil-Federer · MIT
           </p>
         </div>
       </div>

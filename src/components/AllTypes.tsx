@@ -104,7 +104,7 @@ const AllTypes: FC<AllTypesProps> = ({ currentCode, onBack }) => {
 
       {/* 底部水印 */}
       <p className="text-xs text-text-muted opacity-50 mb-4">
-        洪荒人格测试 · 基于山海经 · 纯属娱乐
+        基于山海经 · 原作 Neil-Federer · MIT
       </p>
     </div>
   );

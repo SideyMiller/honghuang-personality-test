@@ -1,43 +1,23 @@
 
-import { type FC, useRef, useState, useCallback } from 'react';
+import { type FC } from 'react';
 import { type ScoreResult } from '../utils/scoring';
 import { type Personality } from '../data/personalities';
-import PosterCanvas from './PosterCanvas';
-import { generatePoster, showPosterModal } from '../utils/posterGenerator';
 
 interface ResultProps {
   result: ScoreResult;
   personalityMap: Record<string, Personality>;
   onRestart: () => void;
   onViewAllTypes?: () => void;
+  onBackToHome?: () => void;
 }
 
-const Result: FC<ResultProps> = ({ result, personalityMap, onRestart, onViewAllTypes }) => {
+const Result: FC<ResultProps> = ({ result, personalityMap, onRestart, onViewAllTypes, onBackToHome }) => {
   const p = result.personality;
   const bestMatchP = personalityMap[p.bestMatch];
   const worstMatchP = personalityMap[p.worstMatch];
 
-  const posterRef = useRef<HTMLDivElement>(null);
-  const [generating, setGenerating] = useState(false);
-
-  const handleGeneratePoster = useCallback(async () => {
-    if (!posterRef.current || generating) return;
-    setGenerating(true);
-    try {
-      const dataUrl = await generatePoster(posterRef.current);
-      showPosterModal(dataUrl);
-    } catch (e) {
-      console.error('海报生成失败:', e);
-      alert('海报生成失败，请重试');
-    } finally {
-      setGenerating(false);
-    }
-  }, [generating]);
-
   return (
     <div className="flex flex-col items-center min-h-dvh px-5 py-8">
-      {/* 隐藏的海报画布 */}
-      <PosterCanvas ref={posterRef} result={result} personalityMap={personalityMap} />
       {/* 稀有度标签 */}
       <div
         className="px-4 py-1 rounded-full text-xs tracking-wider mb-6 border"
@@ -162,14 +142,6 @@ const Result: FC<ResultProps> = ({ result, personalityMap, onRestart, onViewAllT
       {/* 操作按钮 */}
       <div className="w-full flex flex-col gap-3 mb-6">
         <button
-          className="w-full py-3.5 bg-cinnabar text-paper-light text-sm tracking-wider rounded-md
-                     shadow-lg hover:bg-cinnabar-dark active:scale-[0.98] transition-all"
-          onClick={handleGeneratePoster}
-          disabled={generating}
-        >
-          {generating ? '⏳ 卷轴生成中...' : '📜 生成天命卷轴'}
-        </button>
-        <button
           onClick={onRestart}
           className="w-full py-3 bg-transparent border border-paper-dark text-text-muted text-sm
                      tracking-wider rounded-md hover:bg-paper-dark/50 active:scale-[0.98] transition-all"
@@ -185,11 +157,20 @@ const Result: FC<ResultProps> = ({ result, personalityMap, onRestart, onViewAllT
             📖 查看全部类型
           </button>
         )}
+        {onBackToHome && (
+          <button
+            onClick={onBackToHome}
+            className="w-full py-3 bg-transparent border border-gold/40 text-text-muted text-sm
+                       tracking-wider rounded-md hover:bg-gold/10 active:scale-[0.98] transition-all"
+          >
+            🏠 返回首页
+          </button>
+        )}
       </div>
 
       {/* 底部水印 */}
       <p className="text-xs text-text-muted opacity-50 mb-4">
-        洪荒人格测试 · 基于山海经 · 纯属娱乐
+        基于山海经 · 原作 Neil-Federer · MIT
       </p>
 
       {/* emoji 出场动画 */}
